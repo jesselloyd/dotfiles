@@ -1,4 +1,5 @@
 " ===============  Begin Basics  ===============
+
 set nocompatible
 set title
 set number
@@ -9,46 +10,76 @@ set noswapfile
 set nobackup
 set splitright
 set splitbelow
+set hidden
+set path +=/usr/local/include
 
-colorscheme monokaitwo
+" Color scheme  
 set t_Co=256
+set background=dark
+colorscheme monokai
+set termguicolors
 
+if &term =~ '256color'
+    set t_ut=
+endif
+
+syntax on
+
+" Wild menu settings
 set wildmenu
 set wildmode=longest:full,full
 set clipboard=unnamed            
-" use OS clipboard by default
 
-set mouse=a
 set esckeys
 set scrolloff=3
 set ruler
 
 " Remap normal mode to jk 
-imap jk <Esc>
+inoremap jk <Esc>
+inoremap <Esc> <NOP>
+set mouse=nv
 
-" Disable arrow keys in insert mode
-imap <Up> <Nop>
-imap <Down> <Nop>
-imap <Left> <Nop>
-imap <Right> <Nop>
+" Disable arrow keys
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+imap <Up> <NOP>
+imap <Down> <NOP>
+imap <Left> <NOP>
+imap <Right> <NOP>
 
-set path +=/usr/local/include
+" macOS fix against disabling arrow keys in insert and normal mode
+imap <ESC>oA <ESC>ki
+imap <ESC>oB <ESC>ji
+imap <ESC>oC <ESC>li
+imap <ESC>oD <ESC>hi
 
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * set cul
-    autocmd WinLeave * set nocul
-augroup END
+" Move selected lines up and down
+nnoremap ∆ :m .+1<CR>==
+nnoremap ˚ :m .-2<CR>==
+inoremap ∆ <Esc>:m .+1<CR>==gi
+inoremap ˚ <Esc>:m .-2<CR>==gi
+vnoremap ∆ :m '>+1<CR>gv=gv
+vnoremap ˚ :m '<-2<CR>gv=gv
+
+" Change cursor style in insert mode and highlight current line
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+:autocmd InsertEnter,InsertLeave * set cul!
+
+let CursorColumnI = 0 
+autocmd InsertEnter * let CursorColumnI = col('.')
+autocmd CursorMovedI * let CursorColumnI = col('.')
+autocmd InsertLeave * if col('.') != CursorColumnI | call cursor(0, col('.')+1) | endif
 
 " ===============   End Basics   ===============
 
 " =============== Begin Tab/Bksp ===============
 
-" improved tab and backspace behavior (4 spaces, backspace to line)
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set noexpandtab
+set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set backspace=indent,eol,start
 
 " ===============  End Tab/Bksp  ===============
@@ -58,55 +89,44 @@ set backspace=indent,eol,start
 set hlsearch
 set ignorecase
 set incsearch
+nnoremap s :Ag<SPACE>
 
 " ===============   End Search   ===============
 
 " ===============  Begin Vundle  ===============
 
-filetype off                     " required!
+filetype off                     
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
-
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-
 Plugin 'Valloric/YouCompleteMe'
 " Plugin 'shougo/neocomplete.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'raimondi/delimitmate'
 Plugin 'scrooloose/syntastic'
-
 Plugin 'rust-lang/rust.vim'
 Plugin 'racer-rust/vim-racer'
 Plugin 'cespare/vim-toml'
-
 " Plugin 'fatih/vim-go', { 'do' : ':GoInstallBinaries' }
-" Plugin 'vim-ruby/vim-ruby'
-" Plugin 'tpope/vim-rails'
-
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'tpope/vim-rails'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'leshill/vim-json'
-
 Plugin 'rking/ag.vim'
-
-Plugin 'majutsushi/tagbar'
-
+" Plugin 'majutsushi/tagbar'
 Plugin 'kchmck/vim-coffee-script'
-
 Plugin 'tpope/vim-surround'
 Plugin 'justinmk/vim-syntax-extra'
-
 Plugin 'craigemery/vim-autotag'
-
 Plugin 'mattn/emmet-vim'
-
-call vundle#end()                " required
+Plugin 'yuttie/comfortable-motion.vim'
+call vundle#end()                
 filetype plugin indent on
-syntax on
 
 " ===============   End Vundle   ===============
 
@@ -116,7 +136,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 set guifont=Source\ Code\ Pro\ for\ Powerline
-" unicode symbols
+
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
@@ -130,7 +150,6 @@ let g:airline_symbols.paste = 'Þ'
 let g:airline_symbols.paste = '∥'
 let g:airline_symbols.whitespace = 'Ξ'
 
-" airline symbols
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
@@ -159,39 +178,22 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_rust_src_path = '~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src'
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-
-"
-" YouCompleteMe options
-"
-
 let g:ycm_register_as_syntastic_checker = 1 "default 1
 let g:Show_diagnostics_ui = 1 "default 1
-
-"will put icons in Vim's gutter on lines that have a diagnostic set.
-"Turning this off will also turn off the YcmErrorLine and YcmWarningLine
-"highlighting
 let g:ycm_enable_diagnostic_signs = 1
 let g:ycm_enable_diagnostic_highlighting = 1
 let g:ycm_always_populate_location_list = 1 "default 0
 let g:ycm_open_loclist_on_ycm_diags = 1 "default 1
-
-
 let g:ycm_complete_in_strings = 1 "default 1
 let g:ycm_collect_identifiers_from_tags_files = 1 "default 0
 let g:ycm_path_to_python_interpreter = '' "default ''
-
-
 let g:ycm_server_use_vim_stdout = 0 "default 0 (logging to console)
 let g:ycm_server_log_level = 'info' "default info
-
 let g:ycm_confirm_extra_conf = 1
-
-let g:ycm_goto_buffer_command = 'horizontal-split' "[ 'same-buffer', 'horizontal-split', 'vertical-split', 'new-tab' ]
+let g:ycm_goto_buffer_command = 'horizontal-split'
 let g:ycm_filetype_whitelist = { '*': 1 }
 let g:ycm_key_invoke_completion = '<C-Space>'
-
 let g:ycm_collect_identifiers_from_tags_files = 1
-
 nnoremap <F11> :YcmForceCompileAndDiagnostics <CR>
 
 " ============  End YouCompleteMe  =============
@@ -202,7 +204,6 @@ let g:syntastic_rust_checkers = ['cargo']
 let g:rustfmt_autosave = 1
 
 " Rust racer completion support
-set hidden
 let g:racer_cmd = $HOME . "/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
 
@@ -267,5 +268,3 @@ let g:jsx_ext_required = 0
 map <C-i> :TagbarToggle<CR>
 
 " =============== End Tag Bar ================
-"
-nnoremap s :Ag<SPACE>
