@@ -1,42 +1,34 @@
 " ===============  Begin Basics  ===============
 
 set nocompatible
-set title
+set title 
 set number
-set laststatus=2
-set showcmd
-set showmode
 set noswapfile
 set nobackup
 set splitright
 set splitbelow
 set hidden
-set path +=/usr/local/include
+set path+=/usr/local/include
+set scrolloff=3
 
 " Color scheme  
-set t_Co=256
 set background=dark
-colorscheme monokai
-set termguicolors
-
-if &term =~ '256color'
-    set t_ut=
-endif
-
+colorscheme gruvbox
 syntax on
 
-" Wild menu settings
+" Wild menu settings for showing command option 
+" completion lists right above the status line
 set wildmenu
 set wildmode=longest:full,full
-set clipboard=unnamed            
 
-set esckeys
-set scrolloff=3
-set ruler
+" Allows use of the system cliboard for yank/paste
+set clipboard=unnamed
 
 " Remap normal mode to jk 
-inoremap jk <Esc>
-inoremap <Esc> <NOP>
+inoremap jk <ESC>
+inoremap <ESC> <NOP>
+
+" Show the mouse in normal and visual mode only
 set mouse=nv
 
 " Disable arrow keys
@@ -55,32 +47,46 @@ imap <ESC>oB <ESC>ji
 imap <ESC>oC <ESC>li
 imap <ESC>oD <ESC>hi
 
-" Move selected lines up and down
+" Move selected lines up (alt + k)  and down (alt + j)
 nnoremap ∆ :m .+1<CR>==
 nnoremap ˚ :m .-2<CR>==
-inoremap ∆ <Esc>:m .+1<CR>==gi
-inoremap ˚ <Esc>:m .-2<CR>==gi
+inoremap ∆ <ESC>:m .+1<CR>==gi
+inoremap ˚ <ESC>:m .-2<CR>==gi
 vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
 
-" Change cursor style in insert mode and highlight current line
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-
-:autocmd InsertEnter,InsertLeave * set cul!
-
+" Highlight current line in insert mode
+autocmd InsertEnter,InsertLeave * set cul!
 let CursorColumnI = 0 
 autocmd InsertEnter * let CursorColumnI = col('.')
 autocmd CursorMovedI * let CursorColumnI = col('.')
 autocmd InsertLeave * if col('.') != CursorColumnI | call cursor(0, col('.')+1) | endif
 
+" Return to last edit position when opening files
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" Window tabs navigation
+nnoremap th :tabfirst<CR>
+nnoremap tk :tabnext<CR>
+nnoremap tj :tabprev<CR>
+nnoremap tl :tablast<CR>
+nnoremap tn :tabnew<SPACE>
+nnoremap td :tabclose<CR>
+
 " ===============   End Basics   ===============
 
 " =============== Begin Tab/Bksp ===============
+"
+" Use spaces instead of tabs
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
 
-set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
-set backspace=indent,eol,start
+set autoindent
+set smartindent 
+
+set backspace=eol,start,indent
 
 " ===============  End Tab/Bksp  ===============
 
@@ -88,83 +94,67 @@ set backspace=indent,eol,start
 
 set hlsearch
 set ignorecase
+set smartcase
 set incsearch
-nnoremap s :Ag<SPACE>
+
+nnoremap s :Rg<SPACE>
 
 " ===============   End Search   ===============
 
-" ===============  Begin Vundle  ===============
+" ===============  Begin ALE  ==================
 
-filetype off                     
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'scrooloose/nerdtree'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'Valloric/YouCompleteMe'
-" Plugin 'shougo/neocomplete.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'raimondi/delimitmate'
-Plugin 'scrooloose/syntastic'
-Plugin 'rust-lang/rust.vim'
-Plugin 'racer-rust/vim-racer'
-Plugin 'cespare/vim-toml'
-" Plugin 'fatih/vim-go', { 'do' : ':GoInstallBinaries' }
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-rails'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
-Plugin 'leshill/vim-json'
-Plugin 'rking/ag.vim'
-" Plugin 'majutsushi/tagbar'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'tpope/vim-surround'
-Plugin 'justinmk/vim-syntax-extra'
-Plugin 'craigemery/vim-autotag'
-Plugin 'mattn/emmet-vim'
-Plugin 'yuttie/comfortable-motion.vim'
-call vundle#end()                
-filetype plugin indent on
+let g:ale_completion_enabled = 1
+let g:airline#extensions#ale#enabled = 1
 
-" ===============   End Vundle   ===============
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
 
-" =============== Begin Airline  ===============
+" Map Goto definition to open in a new Vsplit window
+nnoremap gd :vsplit \| ALEGoToDefinition<CR>
+nnoremap gr :ALEFindReferences<CR>
 
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-set guifont=Source\ Code\ Pro\ for\ Powerline
+" ===============  End ALE  ====================
 
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
+" =============== Start Vim-Plug ===============
 
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
+call plug#begin('~/.vim/plugged')
 
-" ===============  End Airline   ===============
+" File search and navigation
+Plug 'junegunn/fzf'
+Plug 'jremmen/vim-ripgrep'
+
+" Git 
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+" File tree and file status line
+Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline'
+
+" Completions and code diagnostics tools
+Plug 'w0rp/ale'
+Plug 'ervandew/supertab'
+Plug 'shougo/echodoc'
+
+" Themes 
+Plug 'vim-airline/vim-airline-themes'
+Plug 'morhetz/gruvbox'
+
+" Languages
+Plug 'pangloss/vim-javascript'
+Plug 'posva/vim-vue'
+
+call plug#end()
+
+" =============== End Vim-Plug =================
 
 " =============== Begin NERDTree ===============
 
 map <C-n> :NERDTreeToggle<CR>
+
 " Close Vim if NERDTree is the only window open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 " Autostart NERDTree when opening a directory
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
@@ -173,98 +163,60 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " ===============  End NERDTree  ===============
 
-" ============ Begin YouCompleteMe =============
+" ===============  Begin Fzf  ==================
 
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_rust_src_path = '~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src'
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-let g:ycm_register_as_syntastic_checker = 1 "default 1
-let g:Show_diagnostics_ui = 1 "default 1
-let g:ycm_enable_diagnostic_signs = 1
-let g:ycm_enable_diagnostic_highlighting = 1
-let g:ycm_always_populate_location_list = 1 "default 0
-let g:ycm_open_loclist_on_ycm_diags = 1 "default 1
-let g:ycm_complete_in_strings = 1 "default 1
-let g:ycm_collect_identifiers_from_tags_files = 1 "default 0
-let g:ycm_path_to_python_interpreter = '' "default ''
-let g:ycm_server_use_vim_stdout = 0 "default 0 (logging to console)
-let g:ycm_server_log_level = 'info' "default info
-let g:ycm_confirm_extra_conf = 1
-let g:ycm_goto_buffer_command = 'horizontal-split'
-let g:ycm_filetype_whitelist = { '*': 1 }
-let g:ycm_key_invoke_completion = '<C-Space>'
-let g:ycm_collect_identifiers_from_tags_files = 1
-nnoremap <F11> :YcmForceCompileAndDiagnostics <CR>
+nnoremap <C-p> :FZF<CR>
 
-" ============  End YouCompleteMe  =============
+" Use ripgrep with fzf
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --ignore-case '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
 
-" ===============   Begin Rust   ===============
+let g:fzf_colors =
+    \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
 
-let g:syntastic_rust_checkers = ['cargo']
-let g:rustfmt_autosave = 1
+" ===============  End Fzf =====================
 
-" Rust racer completion support
-let g:racer_cmd = $HOME . "/.cargo/bin/racer"
-let g:racer_experimental_completer = 1
+" ============  Begin SuperTab  ================
 
-au FileType rust nmap gd <Plug>(rust-def)
-au FileType rust nmap gs <Plug>(rust-def-split)
-au FileType rust nmap gx <Plug>(rust-def-vertical)
-au FileType rust nmap ga <Plug>(rust-doc)
+let g:SuperTabDefaultCompletionType = "context"
 
-" ===============    End Rust    ===============
+" =============  End SuperTab  =================
 
-" ===============    Begin Go    ===============
+" ============ Begin GitGutter =================
 
-" use goimports for formatting
-let g:go_fmt_command = "goimports"
+" used to ensure GitGutter updates responsively
+set updatetime=100
 
-" turn highlighting on
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
+" ============= End GitGutter ==================
 
-let g:syntastic_go_checkers = ['go', 'golint', 'errcheck']
-let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go']  }
+" ============ Begin EchoDoc ===================
 
-" Open go doc in vertical window, horizontal, or tab
-au Filetype go nnoremap <leader>v :vsp <CR>:exe "GoDef" <CR>
-au Filetype go nnoremap <leader>s :sp <CR>:exe "GoDef"<CR>
-au Filetype go nnoremap <leader>t :tab split <CR>:exe "GoDef"<CR>
+let g:echodoc_enable_at_startup = 1
+set noshowmode
+set shortmess+=c
 
-" ===============     End Go     ===============
+" ============= End EchoDoc ==================== 
 
-" =============== Begin Auto-{}  ===============
+" =============  Start Vue =====================
 
-let delimitMate_expand_cr = 1
-let delimitMate_expand_space = 1
+autocmd FileType vue syntax sync fromstart
+autocmd BufNewFile,BufRead *.vue setf vue
 
-" ===============  End Auto-{}   ===============
+" ==============  End Vue ======================
 
-" ============  Begin Syntastic  ===============
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_check_on_w = 1
-au VimLeave * :!clear
-
-" ============   End Syntastic   ===============
-
-" =============== Begin JavaScipt =============
-
-let g:javascript_plugin_flow = 1
-
-let g:jsx_ext_required = 0
-
-" =============== End JavaScript  ============
-
-" =============== Begin Tag Bar ==============
-
-map <C-i> :TagbarToggle<CR>
-
-" =============== End Tag Bar ================
