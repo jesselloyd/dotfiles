@@ -48,3 +48,11 @@ for PLUGIN in ${PLUGINS[@]}; do
 done
 
 echo "vim setup complete"
+
+echo "setting up alacritty..."
+
+mkdir -p $HOME/.config/alacritty/
+wget https://raw.githubusercontent.com/jesselloyd/dotfiles/master/alacritty.yml -O $HOME/.config/alacritty
+
+echo "alacritty setup complete"
+
