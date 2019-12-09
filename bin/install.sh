@@ -25,6 +25,14 @@ PLUGINS=(
   "janko/vim-test"
 )
 
+echo "setting up zsh..."
+
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+wget https://github.com/morhetz/jesselloyd/dotfiles/master/.zshrc -O $HOME/.zshrc
+
+echo "zsh setup complete"
+
 echo "setting up vim..."
 
 mkdir -p $PLUGIN_DIR
