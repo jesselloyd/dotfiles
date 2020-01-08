@@ -199,9 +199,11 @@ colors:
     cyan:    '0x8ec07c'
     white:   '0xebdbb2'
 
-  cursor:
-    text: "0x002635"
-    cursor: "0xfabd2f"
+  # Disable custom cursor colors as they conflict with gruvbox hls cursor inversion
+  # in vim
+  #cursor:
+  #  text: "0x002635"
+  #  cursor: "0xfabd2f"
 
 # Visual Bell
 #
@@ -545,4 +547,3 @@ key_bindings:
   - { key: F11, mods: Super, chars: "\x1b[23;3~" }
   - { key: F12, mods: Super, chars: "\x1b[24;3~" }
   - { key: NumpadEnter, chars: "\n" }
-

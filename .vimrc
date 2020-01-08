@@ -25,12 +25,12 @@ set signcolumn=yes
 set shortmess+=c
 
 " Color scheme
-set termguicolors
+if (has('termguicolors'))
+  set termguicolors
+endif
 syntax enable
 colorscheme gruvbox
 set background=dark
-let g:enable_bold_font=1
-let g:enable_italic_font=1
 
 " Wild menu settings for showing command option
 " completion lists right above the status line
@@ -76,7 +76,8 @@ vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
 
 " Show line highlight when in insert mode.
-autocmd InsertEnter,InsertLeave * set cul!
+" autocmd InsertEnter,InsertLeave * set cul!
+set cul!
 
 " Return to last edit position when opening files
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -135,9 +136,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 
-" Editor utility
+" Editor utilities
 Plug 'junegunn/vim-peekaboo' " (@ in normal mode)
-Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-unimpaired'
 
 " Completions and code diagnostics tools
 Plug 'shougo/echodoc'
@@ -150,8 +151,14 @@ Plug 'morhetz/gruvbox'
 " Languages
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'posva/vim-vue'
 Plug 'fatih/vim-go'
+Plug 'chrisbra/csv.vim'
+
+" Semantic enhancements
+" improved semantic highlighting for Python
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 
 " Editor configuration
 Plug 'editorconfig/editorconfig-vim'
@@ -241,39 +248,38 @@ let g:airline_theme = 'gruvbox'
 
 " ==============  End Airline  =================
 
-" ============== Begin Test ====================
+" ======= Begin Syntax Highlighting ============
 
-nmap <silent> t<C-n> :TestNearest<CR>
-nmap <silent> t<C-f> :TestFile<CR>
-nmap <silent> t<C-s> :TestSuite<CR>
-nmap <silent> t<C-l> :TestLast<CR>
-nmap <silent> t<C-g> :TestVisit<CR>
+nnoremap <silent> [oh :call gruvbox#hls_show()<CR>
+nnoremap <silent> ]oh :call gruvbox#hls_hide()<CR>
+nnoremap <silent> coh :call gruvbox#hls_toggle()<CR>
 
-" =============== End Test =====================
+nnoremap * :let @/ = ""<CR>:call gruvbox#hls_show()<CR>*
+nnoremap / :let @/ = ""<CR>:call gruvbox#hls_show()<CR>/
+nnoremap ? :let @/ = ""<CR>:call gruvbox#hls_show()<CR>?
+
+
+" ========= End Syntax Highlighting ============
 
 " =============== Begin Coc ====================
 
 " Use tab for trigger completion with characters ahead and navigate
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ pumvisible() ? '\<C-n>' :
+      \ <SID>check_back_space() ? '\<TAB>' :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> pumvisible() ? '\<C-p>' : '\<C-h>'
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <c-space> to trigger completion.
+" Use <c-space> to trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+" Use `complete_info` when selecting a completion from triggered list
+inoremap <expr> <cr> complete_info()["selected"] != '-1' ? '\<C-y>' : '\<C-g>u\<CR>'
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <lug>(coc-diagnostic-prev)
@@ -306,7 +312,7 @@ nmap <F2> <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
-augroup mygroup
+augroup formatting
   autocmd!
   " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
@@ -339,14 +345,13 @@ command! -nargs=0 Format :call CocAction('format')
 " Use `:Fold` to fold current buffer
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
-" use `:OR` for organize import of current buffer
+" Use `:OR` for organize import of current buffer
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" Using CocList
-" Show all diagnostics
+" Use CocList to show all diagnostics
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
 nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
@@ -365,3 +370,12 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 " ===============  End Coc  ====================
 
+" ============== Begin Test ====================
+
+nmap <silent> t<C-n> :TestNearest<CR>
+nmap <silent> t<C-f> :TestFile<CR>
+nmap <silent> t<C-s> :TestSuite<CR>
+nmap <silent> t<C-l> :TestLast<CR>
+nmap <silent> t<C-g> :TestVisit<CR>
+
+" =============== End Test =====================

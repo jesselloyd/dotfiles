@@ -39,14 +39,12 @@ mkdir -p $PLUGIN_DIR
 mkdir -p $COLORS_DIR
 mkdir -p $AUTOLOAD_DIR
 
-# Get config
 wget https://raw.githubusercontent.com/jesselloyd/dotfiles/master/.vimrc -O $HOME/.vimrc
 
 # Add vim-plug to $HOME/.vim/autoload and corresponding dirs
 curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# Add colorscheme to colors folder
 wget https://github.com/morhetz/gruvbox/blob/master/colors/gruvbox.vim -O $COLORS/gruvbox.vim
 
 # Install all plugins to correct folder

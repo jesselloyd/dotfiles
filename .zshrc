@@ -25,10 +25,10 @@ export LANG=en_US.UTF-8
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
-# SSH 
+# ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set term environment for tmux compatibility
+# set term environment
 export TERM="xterm-256color"
 
 # NVM setup (Node versioning)
@@ -44,7 +44,7 @@ if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
 fi
 
-# Neovim aliasing setup
+# vim editor and neovim aliasing setup
 alias vim="nvim -d"
 export EDITOR=nvim
 
