@@ -151,8 +151,8 @@ Plug 'tomasiser/vim-code-dark'
 " Languages
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
-" Plug 'maxmellon/vim-jsx-pretty'
-" Plug 'flowtype/vim-flow'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'flowtype/vim-flow'
 
 Plug 'posva/vim-vue'
 
