@@ -29,7 +29,6 @@ if (has('termguicolors'))
   set termguicolors
 endif
 syntax enable
-colorscheme gruvbox
 set background=dark
 
 " Wild menu settings for showing command option
@@ -138,7 +137,7 @@ Plug 'vim-airline/vim-airline'
 
 " Editor utilities
 Plug 'junegunn/vim-peekaboo' " (@ in normal mode)
-Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-commentary'
 
 " Completions and code diagnostics tools
 Plug 'shougo/echodoc'
@@ -147,14 +146,21 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Themes
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
+Plug 'tomasiser/vim-code-dark'
 
 " Languages
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
+" Plug 'maxmellon/vim-jsx-pretty'
+" Plug 'flowtype/vim-flow'
+
 Plug 'posva/vim-vue'
+
 Plug 'fatih/vim-go'
+
 Plug 'chrisbra/csv.vim'
+
+Plug 'elixir-editors/vim-elixir'
 
 " Semantic enhancements
 " improved semantic highlighting for Python
@@ -244,19 +250,21 @@ let g:EditorConfig_core_mode = 'external_command'
 
 " ============== Begin Airline =================
 
-let g:airline_theme = 'gruvbox'
+let g:airline_theme = 'codedark'
 
 " ==============  End Airline  =================
 
 " ======= Begin Syntax Highlighting ============
 
-nnoremap <silent> [oh :call gruvbox#hls_show()<CR>
-nnoremap <silent> ]oh :call gruvbox#hls_hide()<CR>
-nnoremap <silent> coh :call gruvbox#hls_toggle()<CR>
+" Only enable this if using gruvbox theme
 
-nnoremap * :let @/ = ""<CR>:call gruvbox#hls_show()<CR>*
-nnoremap / :let @/ = ""<CR>:call gruvbox#hls_show()<CR>/
-nnoremap ? :let @/ = ""<CR>:call gruvbox#hls_show()<CR>?
+" nnoremap <silent> [oh :call gruvbox#hls_show()<CR>
+" nnoremap <silent> ]oh :call gruvbox#hls_hide()<CR>
+" nnoremap <silent> coh :call gruvbox#hls_toggle()<CR>
+
+" nnoremap * :let @/ = ""<CR>:call gruvbox#hls_show()<CR>*
+" nnoremap / :let @/ = ""<CR>:call gruvbox#hls_show()<CR>/
+" nnoremap ? :let @/ = ""<CR>:call gruvbox#hls_show()<CR>?
 
 
 " ========= End Syntax Highlighting ============
@@ -279,7 +287,7 @@ endfunction
 inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use `complete_info` when selecting a completion from triggered list
-inoremap <expr> <cr> complete_info()["selected"] != '-1' ? '\<C-y>' : '\<C-g>u\<CR>'
+inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <lug>(coc-diagnostic-prev)
@@ -379,3 +387,5 @@ nmap <silent> t<C-l> :TestLast<CR>
 nmap <silent> t<C-g> :TestVisit<CR>
 
 " =============== End Test =====================
+
+colorscheme codedark
