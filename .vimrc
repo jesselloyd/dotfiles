@@ -19,6 +19,7 @@ set visualbell
 set noerrorbells
 
 set autoread
+set autochdir
 
 set noshowmode
 set signcolumn=yes
@@ -32,25 +33,25 @@ syntax enable
 set background=dark
 
 " Wild menu settings for showing command option
-" completion lists right above the status line
+" completion lists right above the status line.
 set wildmenu
 set wildmode=longest:full,full
 
-" Allows use of the system cliboard for yank/paste
+" Allows use of the system cliboard for yank/paste.
 set clipboard^=unnamed,unnamedplus
 
-" Remap normal mode to jk
+" Remap normal mode to jk.
 inoremap jk <ESC>
 inoremap kj <ESC>
 inoremap <ESC> <NOP>
 
-" Remap terminal model quit to escape
+" Remap terminal model quit to escape.
 tnoremap <Esc> <C-\><C-n>
 
-" Show the mouse in normal and visual mode only
+" Show the mouse in normal and visual mode only.
 set mouse=nv
 
-" Disable arrow keys
+" Disable arrow keys.
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
@@ -60,13 +61,13 @@ imap <Down> <NOP>
 imap <Left> <NOP>
 imap <Right> <NOP>
 
-" macOS fix against disabling arrow keys in insert and normal mode
+" (macOS) Fix against disabling arrow keys in insert and normal mode.
 imap <ESC>oA <ESC>ki
 imap <ESC>oB <ESC>ji
 imap <ESC>oC <ESC>li
 imap <ESC>oD <ESC>hi
 
-" Move selected lines up (alt + k)  and down (alt + j)
+" (macOS) Move selected lines up (ALT + K)  and down (ALT + J).
 nnoremap ∆ :m .+1<CR>==
 nnoremap ˚ :m .-2<CR>==
 inoremap ∆ <ESC>:m .+1<CR>==gi
@@ -75,13 +76,12 @@ vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
 
 " Show line highlight when in insert mode.
-" autocmd InsertEnter,InsertLeave * set cul!
-set cul!
+autocmd InsertEnter,InsertLeave * set cul!
 
-" Return to last edit position when opening files
+" Return to last edit position when opening files.
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-" Window tabs navigation
+" Window tabs navigation.
 nnoremap th :tabfirst<CR>
 nnoremap tk :tabnext<CR>
 nnoremap tj :tabprev<CR>
@@ -93,7 +93,7 @@ nnoremap td :tabclose<CR>
 
 " =============== Begin Tab/Bksp ===============
 
-" Use spaces instead of tabs
+" Use spaces instead of tabs.
 set smarttab
 set cindent
 set tabstop=2
@@ -116,61 +116,40 @@ set incsearch
 
 nnoremap s :Rg<SPACE>
 
-" Deactivate highlighted matching terms on double enter press
+" Deactivate highlighted matching terms on double enter press.
 nnoremap <CR> :noh<CR><CR>
 
 " ===============   End Search   ===============
 
 call plug#begin()
 
-" File search and navigation
+" File search and navigation.
 Plug 'junegunn/fzf'
 Plug 'jremmen/vim-ripgrep'
 
-" Git
+" Git.
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
-" File tree and file status line
+" File tree and file status line.
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 
-" Editor utilities
-Plug 'junegunn/vim-peekaboo' " (@ in normal mode)
+" Editor utilities.
 Plug 'tpope/vim-commentary'
 
-" Completions and code diagnostics tools
-Plug 'shougo/echodoc'
+" Completions and code diagnostics tools.
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" Themes
+" Themes.
 Plug 'vim-airline/vim-airline-themes'
-Plug 'morhetz/gruvbox'
-Plug 'tomasiser/vim-code-dark'
+Plug 'chriskempson/base16-vim'
 
-" Languages
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'flowtype/vim-flow'
+" Languages.
+Plug 'sheerun/vim-polyglot'
 
-Plug 'posva/vim-vue'
-
-Plug 'fatih/vim-go'
-
-Plug 'chrisbra/csv.vim'
-
-Plug 'elixir-editors/vim-elixir'
-
-" Semantic enhancements
-" improved semantic highlighting for Python
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-
-" Editor configuration
+" Editor configuration.
 Plug 'editorconfig/editorconfig-vim'
-
-" Test tooling
-Plug 'janko/vim-test'
 
 call plug#end()
 
@@ -182,8 +161,10 @@ map <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeShowHidden=1
 
-" Close Vim if NERDTree is the only window open
+" Close Vim if NERDTree is the only window open.
 autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+" Open README.md in current directory if exists.
+autocmd VimEnter * if filereadable(expand('README.md')) | edit README.md | endif
 
 " ===============  End NERDTree  ===============
 
@@ -191,13 +172,15 @@ autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isT
 
 nnoremap <C-p> :FZF<CR>
 
-" Use ripgrep with fzf
-command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --ignore-case '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 let g:fzf_colors =
       \ { 'fg':      ['fg', 'Normal'],
@@ -214,7 +197,7 @@ let g:fzf_colors =
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
 
-" Hide statusline when opening fzf window
+" Hide statusline when opening fzf window.
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
@@ -223,24 +206,17 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 
 " ============ Begin GitGutter =================
 
-" used to ensure GitGutter updates responsively
+" used to ensure GitGutter updates responsively.
 set updatetime=100
 
 " ============= End GitGutter ==================
 
-" ============ Begin EchoDoc ===================
+" ========= Start Syntax mappings =============
 
-let g:echodoc_enable_at_startup = 1
-let g:echodoc#type = 'virtual'
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
+autocmd BufNewFile,BufRead *.cs setlocal shiftwidth=4 softtabstop=4 expandtab
 
-" ============= End EchoDoc ====================
-
-" =============  Start Vue =====================
-
-autocmd FileType vue syntax sync fromstart
-autocmd BufNewFile,BufRead *.vue setf vue
-
-" ==============  End Vue ======================
+" ========= End Syntax mappings ===============
 
 " ============= Start EditorConfig ============
 
@@ -250,28 +226,13 @@ let g:EditorConfig_core_mode = 'external_command'
 
 " ============== Begin Airline =================
 
-let g:airline_theme = 'codedark'
+let g:airline_theme = 'base16_default'
 
 " ==============  End Airline  =================
 
-" ======= Begin Syntax Highlighting ============
-
-" Only enable this if using gruvbox theme
-
-" nnoremap <silent> [oh :call gruvbox#hls_show()<CR>
-" nnoremap <silent> ]oh :call gruvbox#hls_hide()<CR>
-" nnoremap <silent> coh :call gruvbox#hls_toggle()<CR>
-
-" nnoremap * :let @/ = ""<CR>:call gruvbox#hls_show()<CR>*
-" nnoremap / :let @/ = ""<CR>:call gruvbox#hls_show()<CR>/
-" nnoremap ? :let @/ = ""<CR>:call gruvbox#hls_show()<CR>?
-
-
-" ========= End Syntax Highlighting ============
-
 " =============== Begin Coc ====================
 
-" Use tab for trigger completion with characters ahead and navigate
+" Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -283,23 +244,23 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <c-space> to trigger completion
+" Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use `complete_info` when selecting a completion from triggered list
+" Use `complete_info` when selecting a completion from triggered list.
 inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Use `[g` and `]g` to navigate diagnostics
+" Use `[g` and `]g` to navigate diagnostics.
 nmap <silent> [g <lug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" Remap keys for gotos
+" Remap keys for gotos.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use gh to show documentation in preview window
+" Use gh to show documentation in preview window.
 nnoremap <silent> gh :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
@@ -310,13 +271,13 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Highlight symbol under cursor on CursorHold
+" Highlight symbol under cursor on CursorHold.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Remap for rename current word
+" Remap for rename current word.
 nmap <F2> <Plug>(coc-rename)
 
-" Remap for format selected region
+" Remap for format selected region.
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
@@ -324,68 +285,62 @@ augroup formatting
   autocmd!
   " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
+  " Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+" Remap for do codeAction of selected region, 
+" ex: `<leader>aap` for current paragraph.
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" Remap for do codeAction of current line
+" Remap for do codeAction of current line.
 nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
+" Fix autofix problem of current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Create mappings for function text object, requires document symbols feature of languageserver
+" Create mappings for function text object, 
+" requires document symbols feature of languageserver.
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
 
-" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+" Use <C-d> for select selections ranges, needs server support, 
+" like: coc-tsserver, coc-python.
 nmap <silent> <C-d> <Plug>(coc-range-select)
 xmap <silent> <C-d> <Plug>(coc-range-select)
 
-" Use `:Format` to format current buffer
+" Use `:Format` to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
 
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+" Use `:Fold` to fold current buffer.
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
-" Use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+" Use `:OR` for organize import of current buffer.
+command! -nargs=0 OR   :call CocAction('runCommand', 'editor.action.organizeImport')
 
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
+" Add status line support, for integration with other plugin, 
+" checkout `:h coc-status`.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" Use CocList to show all diagnostics
+" Use CocList to show all diagnostics.
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
+" Manage extensions.
 nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
+" Show commands.
 nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
+" Find symbol of current document.
 nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
+" Search workspace symbols.
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
+" Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 " ===============  End Coc  ====================
 
-" ============== Begin Test ====================
-
-nmap <silent> t<C-n> :TestNearest<CR>
-nmap <silent> t<C-f> :TestFile<CR>
-nmap <silent> t<C-s> :TestSuite<CR>
-nmap <silent> t<C-l> :TestLast<CR>
-nmap <silent> t<C-g> :TestVisit<CR>
-
-" =============== End Test =====================
-
-colorscheme codedark
+colorscheme base16-default-dark

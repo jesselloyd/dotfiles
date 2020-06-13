@@ -28,9 +28,6 @@ export ARCHFLAGS="-arch x86_64"
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# set term environment
-export TERM="xterm-256color"
-
 # NVM setup (Node versioning)
 export NVM_DIR=$HOME/.nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -58,18 +55,21 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 
 # tmux autostart on open
-if [ -z "$TMUX" ]; then
-    base_session='dev'
-    # Create a new session if it doesn't exist
-    tmux has-session -t $base_session || tmux new-session -d -s $base_session
-    # Attach to a client if it already exists
-    client_cnt=$(tmux list-clients | wc -l)
-    if [ $client_cnt -ge 1 ]; then
-        session_name=$base_session"-"$client_cnt
-        tmux new-session -d -t $base_session -s $session_name
-        tmux -2 attach-session -t $session_name \; set-option destroy-unattached
-    else
-        tmux -2 attach-session -t $base_session
-    fi
-fi
+# if [ -z "$TMUX" ]; then
+#     base_session='dev'
+#     # Create a new session if it doesn't exist
+#     tmux has-session -t $base_session || tmux new-session -d -s $base_session
+#     # Attach to a client if it already exists
+#     client_cnt=$(tmux list-clients | wc -l)
+#     if [ $client_cnt -ge 1 ]; then
+#         session_name=$base_session"-"$client_cnt
+#         tmux new-session -d -t $base_session -s $session_name
+#         tmux -2 attach-session -t $session_name \; set-option destroy-unattached
+#     else
+#         tmux -2 attach-session -t $base_session
+#     fi
+# fi
 
+. /usr/local/opt/asdf/asdf.sh
+
+. /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash

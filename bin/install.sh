@@ -11,29 +11,30 @@ PLUGINS=(
   "airblade/vim-gitgutter"
   "scrooloose/nerdtree"
   "vim-airline/vim-airline"
-  "junegunn/vim-peekaboo"
-  "jiangmiao/auto-pairs"
-  "shougo/echodoc"
+  "tpope/vim-commentary"
   "neoclide/coc.nvim/tree/release"
   "vim-airline/vim-airline-themes"
-  "morhetz/gruvbox"
-  "pangloss/vim-javascript"
-  "leafgarland/typescript-vim"
-  "posva/vim-vue"
-  "fatih/vim-go"
+  "chriskempson/base16-vim"
+  "sheerun/vim-polyglot"
   "editorconfig/editorconfig-vim"
-  "janko/vim-test"
 )
 
-echo "setting up zsh..."
+echo "Setting up Alacritty..."
+
+mkdir -p $HOME/.config/alacritty/
+wget https://raw.githubusercontent.com/jesselloyd/dotfiles/master/alacritty.yml -O $HOME/.config/alacritty
+
+echo "Alacritty setup complete."
+
+echo "Setting up ZSH..."
 
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 wget https://github.com/morhetz/jesselloyd/dotfiles/master/.zshrc -O $HOME/.zshrc
 
-echo "zsh setup complete"
+echo "ZSH setup complete."
 
-echo "setting up vim..."
+echo "Setting up Vim..."
 
 mkdir -p $PLUGIN_DIR
 mkdir -p $COLORS_DIR
@@ -41,24 +42,15 @@ mkdir -p $AUTOLOAD_DIR
 
 wget https://raw.githubusercontent.com/jesselloyd/dotfiles/master/.vimrc -O $HOME/.vimrc
 
-# Add vim-plug to $HOME/.vim/autoload and corresponding dirs
+# Add vim-plug to $HOME/.vim/autoload and corresponding dirs.
 curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-wget https://github.com/morhetz/gruvbox/blob/master/colors/gruvbox.vim -O $COLORS/gruvbox.vim
-
-# Install all plugins to correct folder
+# Install all plugins to correct folder.
 for PLUGIN in ${PLUGINS[@]}; do
    DIRNAME="$(basename $PLUGIN)"
    git clone https://github.com/$PLUGIN.git $PLUGIN_DIR/$DIRNAME
 done
 
-echo "vim setup complete"
-
-echo "setting up alacritty..."
-
-mkdir -p $HOME/.config/alacritty/
-wget https://raw.githubusercontent.com/jesselloyd/dotfiles/master/alacritty.yml -O $HOME/.config/alacritty
-
-echo "alacritty setup complete"
+echo "Vim setup complete."
 

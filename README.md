@@ -1,2 +1,3 @@
-# dotfiles
-My personal dotfiles (portability)
+# Dotfiles
+
+My personal dotfiles.
