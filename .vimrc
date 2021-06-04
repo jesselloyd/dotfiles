@@ -19,7 +19,7 @@ set visualbell
 set noerrorbells
 
 set autoread
-set autochdir
+" set autochdir
 
 set noshowmode
 set signcolumn=yes
@@ -27,6 +27,8 @@ set shortmess+=c
 
 " Color scheme
 if (has('termguicolors'))
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
 syntax enable
@@ -137,16 +139,20 @@ Plug 'vim-airline/vim-airline'
 
 " Editor utilities.
 Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
 
 " Completions and code diagnostics tools.
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Themes.
 Plug 'vim-airline/vim-airline-themes'
-Plug 'chriskempson/base16-vim'
+Plug 'crusoexia/vim-monokai'
+Plug 'sonph/onehalf'
+
 
 " Languages.
 Plug 'sheerun/vim-polyglot'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 " Editor configuration.
 Plug 'editorconfig/editorconfig-vim'
@@ -164,7 +170,7 @@ let NERDTreeShowHidden=1
 " Close Vim if NERDTree is the only window open.
 autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
 " Open README.md in current directory if exists.
-autocmd VimEnter * if filereadable(expand('README.md')) | edit README.md | endif
+" autocmd VimEnter * if filereadable(expand('README.md')) | edit README.md | endif
 
 " ===============  End NERDTree  ===============
 
@@ -183,7 +189,7 @@ endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 let g:fzf_colors =
-      \ { 'fg':      ['fg', 'Normal'],
+    \ { 'fg':      ['fg', 'Normal'],
       \ 'bg':      ['bg', 'Normal'],
       \ 'hl':      ['fg', 'Comment'],
       \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -213,7 +219,7 @@ set updatetime=100
 
 " ========= Start Syntax mappings =============
 
-autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 autocmd BufNewFile,BufRead *.cs setlocal shiftwidth=4 softtabstop=4 expandtab
 
 " ========= End Syntax mappings ===============
@@ -226,7 +232,7 @@ let g:EditorConfig_core_mode = 'external_command'
 
 " ============== Begin Airline =================
 
-let g:airline_theme = 'base16_default'
+" let g:airline_theme = 'monokai'
 
 " ==============  End Airline  =================
 
@@ -343,4 +349,7 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 " ===============  End Coc  ====================
 
-colorscheme base16-default-dark
+colorscheme monokai
+set re=0
+autocmd BufEnter * syntax sync fromstart
+

@@ -9,16 +9,18 @@ HYPHEN_INSENSITIVE="true"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
+autoload -U +X bashcompinit && bashcompinit
 plugins=(
   git
   docker
   docker-compose
+  asdf
 )
 
 source $ZSH/oh-my-zsh.sh
+fpath=(~/.zsh $fpath)
 
 # User configuration
-
 export MANPATH="/usr/local/man:$MANPATH"
 export LANG=en_US.UTF-8
 
@@ -27,11 +29,7 @@ export ARCHFLAGS="-arch x86_64"
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# NVM setup (Node versioning)
-export NVM_DIR=$HOME/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+ssh-add ~/.ssh/fortyau_gitlab &> /dev/null
 
 # Jenv setup (Java)
 export PATH=$HOME/.jenv/bin:$PATH
@@ -45,31 +43,15 @@ fi
 alias vim="nvim -d"
 export EDITOR=nvim
 
-# rust enviroment setup
-export PATH=$HOME/.cargo/bin:$PATH
 
-# go environment setup
-export GOPATH=$HOME/go
-export GOROOT=/usr/local/opt/go/libexec
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
+# tabtab source for packages
+# uninstall by removing these lines
+[[ -f ~/.config/tabtab/__tabtab.zsh ]] && . ~/.config/tabtab/__tabtab.zsh || true
 
-# tmux autostart on open
-# if [ -z "$TMUX" ]; then
-#     base_session='dev'
-#     # Create a new session if it doesn't exist
-#     tmux has-session -t $base_session || tmux new-session -d -s $base_session
-#     # Attach to a client if it already exists
-#     client_cnt=$(tmux list-clients | wc -l)
-#     if [ $client_cnt -ge 1 ]; then
-#         session_name=$base_session"-"$client_cnt
-#         tmux new-session -d -t $base_session -s $session_name
-#         tmux -2 attach-session -t $session_name \; set-option destroy-unattached
-#     else
-#         tmux -2 attach-session -t $base_session
-#     fi
-# fi
+# Joust make path fix for generating compile_commands.json with: $ bear make
+# https://github.com/rizsotto/Bear/issues/199
+export PATH=/usr/local/opt/make/libexec/gnubin:$PATH
 
-. /usr/local/opt/asdf/asdf.sh
-
-. /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash
+# export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
+export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{**/node_modules/*,.git/*}"'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

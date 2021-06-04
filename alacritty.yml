@@ -32,6 +32,8 @@ window:
   # Spread additional padding evenly around the terminal content.
   dynamic_padding: false
 
+  dynamic_title: true
+
   # Window decorations
   #
   # Values for `decorations`:
@@ -66,7 +68,7 @@ font:
   bold:
     family: 'IBM Plex Mono'
     # Style can be specified to pick a specific face.
-    style: SemiBold
+    yle: SemiBold
 
   # The italic font face
   italic:
@@ -147,110 +149,57 @@ debug:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
-# vs-code-dark-plus
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x1e1e1e'
-#     foreground: '0xcccccc'
-
-#   # Normal colors
-#   normal:
-#     black:   '0x6a787a'
-#     red:     '0xe9653b'
-#     green:   '0x39e9a8'
-#     yellow:  '0xD7BA7D'
-#     blue:    '0x44aae6'
-#     magenta: '0xe17599'
-#     cyan:    '0x3dd5e7'
-#     white:   '0xc3dde1'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x598489'
-#     red:     '0xe65029'
-#     green:   '0x00ff9a'
-#     yellow:  '0xDCDCAA'
-#     yellow:  '0xFFAF00'
-#     blue:    '0x009afb'
-#     magenta: '0xff578f'
-#     cyan:    '0x9CDCFE'
-#     white:   '0xd9fbff'
-
-# Colors (Gruvbox dark)
-# colors:
-#   # Default colors
-#   primary:
-#     # hard contrast: background = '0x1d2021'
-#     background: '0x282828'
-#     # soft contrast: background = '0x32302f'
-#     foreground: '0xebdbb2'
-
-#   # Normal colors
-#   normal:
-#     black:   '0x282828'
-#     red:     '0xcc241d'
-#     green:   '0x98971a'
-#     yellow:  '0xd79921'
-#     blue:    '0x458588'
-#     magenta: '0xb16286'
-#     cyan:    '0x689d6a'
-#     white:   '0xa89984'
-
-#   # Bright colors
-#   bright:
-#     black:   '0x928374'
-#     red:     '0xfb4934'
-#     green:   '0xb8bb26'
-#     yellow:  '0xfabd2f'
-#     blue:    '0x83a598'
-#     magenta: '0xd3869b'
-#     cyan:    '0x8ec07c'
-#     white:   '0xebdbb2'
-
-# Base16 Default Dark 256 - alacritty color config
-# Chris Kempson (http://chriskempson.com)
 colors:
-  # Default colors
+  name: Monokai (dark)
+  author: Chris Kempson
   primary:
-    background: '0x181818'
-    foreground: '0xd8d8d8'
-
-  # Colors the cursor will use if `custom_cursor_colors` is true
+    background: '#272822'
+    foreground: '#f8f8f2'
   cursor:
-    text: '0x181818'
-    cursor: '0xd8d8d8'
-
-  # Normal colors
+    text: '#272822'
+    cursor: '#f8f8f2'
   normal:
-    black:   '0x181818'
-    red:     '0xab4642'
-    green:   '0xa1b56c'
-    yellow:  '0xf7ca88'
-    blue:    '0x7cafc2'
-    magenta: '0xba8baf'
-    cyan:    '0x86c1b9'
-    white:   '0xd8d8d8'
-
-  # Bright colors
+    black: '#272822'
+    red: '#f92672'
+    green: '#a6e22e'
+    yellow: '#f4bf75'
+    blue: '#66d9ef'
+    magenta: '#ae81ff'
+    cyan: '#a1efe4'
+    white: '#f8f8f2'
   bright:
-    black:   '0x585858'
-    red:     '0xab4642'
-    green:   '0xa1b56c'
-    yellow:  '0xf7ca88'
-    blue:    '0x7cafc2'
-    magenta: '0xba8baf'
-    cyan:    '0x86c1b9'
-    white:   '0xf8f8f8'
+    black: '#75715e'
+    red: '#f92672'
+    green: '#a6e22e'
+    yellow: '#f4bf75'
+    blue: '#66d9ef'
+    magenta: '#ae81ff'
+    cyan: '#a1efe4'
+    white: '#f9f8f5'
 
-  indexed_colors:
-    - { index: 16, color: '0xdc9656' }
-    - { index: 17, color: '0xa16946' }
-    - { index: 18, color: '0x282828' }
-    - { index: 19, color: '0x383838' }
-    - { index: 20, color: '0xb8b8b8' }
-    - { index: 21, color: '0xe8e8e8' }
+  # Dim colors
+  #
+  # If the dim colors are not set, they will be calculated automatically based
+  # on the `normal` colors.
+  #dim:
+  #  black:   '0x000000'
+  #  red:     '0x8c3336'
+  #  green:   '0x7a8530'
+  #  yellow:  '0x97822e'
+  #  blue:    '0x506d8f'
+  #  magenta: '0x80638e'
+  #  cyan:    '0x497e7a'
+  #  white:   '0x9a9a9a'
 
+  # Indexed Colors
+  #
+  # The indexed colors include all colors from 16 to 256.
+  # When these are not set, they're filled with sensible defaults.
+  #
+  # Example:
+  #   `- { index: 16, color: '0xff00ff' }`
+  #
+  indexed_colors: []
 # Visual Bell
 #
 # Any time the BEL code is received, Alacritty "rings" the visual bell. Once
@@ -272,7 +221,7 @@ colors:
 #   - Linear
 #
 # Specifying a `duration` of `0` will disable the visual bell.
-visual_bell:
+bell:
   animation: EaseOutExpo
   duration: 0
   color: '0xffffff'
@@ -338,9 +287,6 @@ selection:
 
   # When set to `true`, selected text will be copied to the primary clipboard.
   save_to_clipboard: false
-
-# Allow terminal applications to change Alacritty's window title.
-dynamic_title: true
 
 cursor:
   # Cursor style
