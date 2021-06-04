@@ -19,7 +19,6 @@ set visualbell
 set noerrorbells
 
 set autoread
-" set autochdir
 
 set noshowmode
 set signcolumn=yes
