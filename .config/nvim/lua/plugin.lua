@@ -18,6 +18,7 @@ require("lazy").setup({
 	"lewis6991/gitsigns.nvim",
 	"tpope/vim-commentary",
 	"rose-pine/neovim",
+	"kazhala/close-buffers.nvim",
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {

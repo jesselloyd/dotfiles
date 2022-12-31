@@ -1,5 +1,5 @@
 vim.keymap.set("i", "jk", "<Esc>")
-vim.keymap.set("n", "<leader>n", vim.cmd.Lex)
+vim.keymap.set("n", "<leader>n", vim.cmd.Lex, { desc = "Toggle file explorer" })
 
 vim.keymap.set("x", "<S-p>", [["_dP]])
 
