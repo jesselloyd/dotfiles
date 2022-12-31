@@ -14,11 +14,11 @@ vim.opt.expandtab = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
-vim.opt.clipboard = 'unnamed,unnamedplus'
+vim.opt.updatetime = 250
 
-vim.opt.updatetime = 300
-
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+
+vim.g.mapleader = " "
