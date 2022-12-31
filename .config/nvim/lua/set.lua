@@ -21,4 +21,4 @@ vim.opt.signcolumn = "yes"
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 
-vim.g.mapleader = " "
+vim.g.mapleader = ","

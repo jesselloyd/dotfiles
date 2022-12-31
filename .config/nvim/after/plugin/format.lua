@@ -4,11 +4,15 @@ local lsp_formatting = vim.api.nvim_create_augroup("LspFormatting", {})
 
 null_ls.setup({
 	sources = {
+		-- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
+		-- formatting
 		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.diagnostics.eslint_d,
 		null_ls.builtins.formatting.eslint_d,
-		null_ls.builtins.code_actions.eslint_d,
 		null_ls.builtins.formatting.prettierd,
+		-- diagnostics
+		--	null_ls.builtins.diagnostics.eslint_d,
+		-- code actions
+		null_ls.builtins.code_actions.eslint_d,
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then

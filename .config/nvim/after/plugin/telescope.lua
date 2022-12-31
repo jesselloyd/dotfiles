@@ -1,10 +1,6 @@
 local telescope = require("telescope")
 telescope.setup({
-	pickers = {
-		find_files = {
-			hidden = true,
-		},
-	},
+	pickers = { find_files = { hidden = true } },
 })
 
 pcall(telescope.load_extension, "fzf")

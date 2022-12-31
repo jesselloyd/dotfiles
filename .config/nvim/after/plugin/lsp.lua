@@ -3,8 +3,8 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
-	"tsserver",
 	"sumneko_lua",
+	"tsserver",
 	"eslint",
 	"rust_analyzer",
 })
@@ -32,4 +32,17 @@ config.tailwindcss.setup({
 
 lsp.setup()
 
-vim.diagnostic.config({ virtual_text = true })
+vim.diagnostic.config({
+	virtual_text = true,
+	signs = true,
+	update_in_insert = false,
+	underline = true,
+	severity_sort = true,
+	float = {
+		focusable = true,
+		border = "rounded",
+		source = "always",
+		header = "",
+		prefix = "",
+	},
+})
