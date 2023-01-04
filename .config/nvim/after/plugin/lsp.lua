@@ -24,8 +24,26 @@ local config = require("lspconfig")
 
 config.tailwindcss.setup({
 	settings = {
+		editor = {
+			quickSuggestions = { strings = true },
+			autoClosingQuotes = "always",
+		},
 		tailwindCSS = {
-			experimental = { classRegex = "tw`([^`]*)" },
+			experimental = {
+				classRegex = {
+					"tw`([^`]*)",
+					'tw="([^"]*)',
+					'tw={"([^"}]*)',
+					"tw\\.\\w+`([^`]*)",
+					"tw\\(.*?\\)`([^`]*)",
+					{ "clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+					{ "classnames\\(([^)]*)\\)", "'([^']*)'" },
+				},
+			},
+			includeLanguages = {
+				typescript = "javascript",
+				typescriptreact = "javascript",
+			},
 		},
 	},
 })
