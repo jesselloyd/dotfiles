@@ -22,10 +22,19 @@ null_ls.setup({
 				buffer = bufnr,
 				callback = function()
 					vim.lsp.buf.format({
-						bufnr = bufnr,
+						bufjnr = bufnr,
 						filter = function(c)
 							return c.name == "null-ls"
 						end,
+					})
+				end,
+			})
+
+			vim.api.nvim_create_autocmd("CursorHold", {
+				buffer = bufnr,
+				callback = function()
+					vim.diagnostic.open_float({
+						bufnr = bufnr,
 					})
 				end,
 			})
