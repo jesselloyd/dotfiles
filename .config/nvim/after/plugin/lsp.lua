@@ -1,42 +1,27 @@
-local lsp = require("lsp-zero")
+local lsp = require("lsp-zero").preset("recommended")
 
-lsp.preset("recommended")
-
-lsp.ensure_installed({
-	"sumneko_lua",
-	"tsserver",
-	"eslint",
-	"rust_analyzer",
-})
-
-local cmp = require("cmp")
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-	["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-	["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-	["<C-y>"] = cmp.mapping.confirm({ select = true }),
-	["<C-Space>"] = cmp.mapping.complete(),
-})
-
-lsp.setup_nvim_cmp({ mapping = cmp_mappings })
-
--- Fix undefined global 'vim'
-lsp.configure("sumneko_lua", {
+-- define global 'vim'
+lsp.configure("lua_ls", {
 	settings = {
 		Lua = {
+			runtime = {
+				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+				version = "LuaJIT",
+			},
 			diagnostics = {
+				-- Get the language server to recognize the `vim` global
 				globals = { "vim" },
 			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files
+				library = vim.api.nvim_get_runtime_file("", true),
+				checkThirdParty = false,
+			},
+			-- Do not send telemetry data containing a randomized but unique identifier
+			telemetry = {
+				enable = false,
+			},
 		},
-	},
-})
-
-lsp.configure("eslint", {
-	settings = {
-		autoFixOnSave = true,
-	},
-	codeActionsOnSave = {
-		mode = "all",
 	},
 })
 
@@ -68,17 +53,32 @@ lsp.configure("tailwindcss", {
 
 lsp.setup()
 
+local cmp = require("cmp")
+require("luasnip.loaders.from_vscode").lazy_load()
+
+cmp.setup({
+	snippet = {
+		expand = function(args)
+			require("luasnip").lsp_expand(args.body)
+		end,
+	},
+	sources = cmp.config.sources({
+		{ name = "path" },
+		{ name = "nvim_lsp" },
+		{ name = "nvim_lua" },
+		{ name = "buffer" },
+		{ name = "luasnip" },
+	}),
+})
+
 vim.diagnostic.config({
 	virtual_text = false,
 	signs = true,
-	update_in_insert = false,
-	underline = true,
 	severity_sort = true,
 	float = {
 		focusable = true,
 		border = "rounded",
 		source = "always",
-		header = "",
-		prefix = "",
+		prefix = "▲ ",
 	},
 })

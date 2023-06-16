@@ -7,16 +7,24 @@ null_ls.setup({
 		-- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
 		-- formatting
 		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.eslint_d,
 		null_ls.builtins.formatting.prettierd,
 		-- diagnostics
-		-- null_ls.builtins.diagnostics.eslint,
+		null_ls.builtins.diagnostics.eslint_d,
+		null_ls.builtins.diagnostics.write_good,
 		-- code actions
 		null_ls.builtins.code_actions.eslint_d,
+		-- completion
+		null_ls.builtins.completion.luasnip,
+		null_ls.builtins.completion.tags,
+		-- hover
+		null_ls.builtins.hover.printenv,
+		null_ls.builtins.hover.dictionary,
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then
 			vim.api.nvim_clear_autocmds({ group = lsp_formatting, buffer = bufnr })
+
+			-- format on save
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = lsp_formatting,
 				buffer = bufnr,
@@ -30,6 +38,7 @@ null_ls.setup({
 				end,
 			})
 
+			-- show diagnostics window on hovering on a problem
 			vim.api.nvim_create_autocmd("CursorHold", {
 				buffer = bufnr,
 				callback = function()

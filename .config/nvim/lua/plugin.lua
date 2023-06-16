@@ -19,31 +19,61 @@ require("lazy").setup({
 	"tpope/vim-commentary",
 	"rose-pine/neovim",
 	"kazhala/close-buffers.nvim",
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-		},
-	},
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-nvim-lua",
-		},
-	},
 	"ray-x/lsp_signature.nvim",
-	"VonHeikemen/lsp-zero.nvim",
 	"jose-elias-alvarez/null-ls.nvim",
+	"lukas-reineke/indent-blankline.nvim",
+	"mfussenegger/nvim-dap",
+	"David-Kunz/jester",
+	"nvim-tree/nvim-tree.lua",
+	{
+		"VonHeikemen/lsp-zero.nvim",
+		dependencies = {
+			{
+				"neovim/nvim-lspconfig",
+				dependencies = {
+					"williamboman/mason.nvim",
+					"williamboman/mason-lspconfig.nvim",
+				},
+			},
+			{
+				"hrsh7th/nvim-cmp",
+				dependencies = {
+					"hrsh7th/cmp-buffer",
+					"hrsh7th/cmp-path",
+					"hrsh7th/cmp-nvim-lsp",
+					"hrsh7th/cmp-nvim-lua",
+				},
+			},
+			{
+				"L3MON4D3/LuaSnip",
+				dependencies = { "rafamadriz/friendly-snippets" },
+			},
+			"saadparwaiz1/cmp_luasnip",
+		},
+	},
 	{
 		"nvim-treesitter/nvim-treesitter",
 		init = function()
 			require("nvim-treesitter.install").update({ with_sync = true })()
 		end,
 	},
+	{
+		"HiPhish/nvim-ts-rainbow2",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+	},
 	{ "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
-	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make", cond = vim.fn.executable("make") == 1 },
+	{
+		"nvim-telescope/telescope-fzf-native.nvim",
+		build = "make",
+		cond = vim.fn.executable("make") == 1,
+		dependencies = { "nvim-telescope/telescope.nvim" },
+	},
+	{
+		"nvim-telescope/telescope-dap.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap", "nvim-treesitter/nvim-treesitter" },
+	},
+	{
+		"nvim-telescope/telescope-ui-select.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+	},
 })

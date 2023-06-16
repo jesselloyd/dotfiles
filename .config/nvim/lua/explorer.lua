@@ -2,9 +2,7 @@ vim.g.netrw_banner = 0
 vim.g.netrw_liststyle = 3
 vim.g.netrw_winsize = 20
 
-vim.opt.splitright = true
-
--- Restore cursor position
+-- restore cursor position
 vim.api.nvim_create_autocmd({ "BufReadPost" }, {
 	pattern = { "*" },
 	callback = function()

@@ -10,7 +10,9 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
--- Search
+vim.opt.cmdheight = 0
+
+-- search
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
