@@ -73,6 +73,8 @@ local function open_nvim_tree(data)
 	end
 
 	api.tree.open()
+	-- prevents hit enter message on opening nvim
+	vim.opt.cmdheight = 0
 end
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })

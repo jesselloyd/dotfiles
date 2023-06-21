@@ -1,22 +1,33 @@
 -- https://rosepinetheme.com/palette/
+local palette = require("rose-pine.palette")
+
 require("rose-pine").setup({
 	highlight_groups = {
-		TelescopeBorder = { fg = "highlight_high", bg = "none" },
+		TelescopeBorder = { fg = palette.highlight_high, bg = "none" },
 		TelescopeNormal = { bg = "none" },
-		TelescopePromptNormal = { bg = "base" },
-		TelescopeResultsNormal = { fg = "subtle", bg = "none" },
-		TelescopeSelection = { fg = "text", bg = "base" },
-		TelescopeSelectionCaret = { fg = "rose", bg = "rose" },
+		TelescopePromptNormal = { bg = palette.base },
+		TelescopeResultsNormal = { fg = palette.subtle, bg = "none" },
+		TelescopeSelection = { fg = palette.text, bg = palette.base },
+		TelescopeSelectionCaret = { fg = palette.rose, bg = palette.rose },
 		FloatBorder = { fg = "none", bg = "none" },
 		NormalFloat = { bg = "none" },
-		StatusLine = { fg = "iris", bg = "iris", blend = 10 },
-		StatusLineNC = { fg = "subtle", bg = "surface" },
+		StatusLine = { fg = palette.iris, bg = palette.iris, blend = 10 },
+		StatusLineNC = { fg = palette.subtle, bg = palette.surface },
 	},
 })
 
-vim.cmd.syntax("on")
+vim.api.nvim_set_hl(0, "TSRainbowRed", { fg = palette.love, ctermbg = 0 })
+vim.api.nvim_set_hl(0, "TSRainbowYellow", { fg = palette.gold, ctermbg = 0 })
+vim.api.nvim_set_hl(0, "TSRainbowBlue", { fg = palette.foam, ctermbg = 0 })
+vim.api.nvim_set_hl(0, "TSRainbowOrange", { fg = palette.rose, ctermbg = 0 })
+vim.api.nvim_set_hl(0, "TSRainbowGreen", { fg = palette.pine, ctermbg = 0 })
+vim.api.nvim_set_hl(0, "TSRainbowViolet", { fg = palette.iris, ctermbg = 0 })
 
-vim.cmd.colorscheme("rose-pine")
+vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { fg = palette.gold, ctermbg = 0 })
+vim.api.nvim_set_hl(0, "IndentBlanklineContextStart", { sp = palette.gold, underline = true, ctermbg = 0 })
+
+vim.api.nvim_set_hl(0, "TreesitterContext", { bg = palette.surface })
+vim.api.nvim_set_hl(0, "TreesitterContextBottom", { sp = palette.highlight_high, underline = true })
 
 vim.g.fzf_colors = {
 	fg = { "fg", "Normal" },
@@ -34,23 +45,7 @@ vim.g.fzf_colors = {
 	header = { "fg", "Comment" },
 }
 
-vim.opt.guicursor = ""
-
 vim.opt.termguicolors = true
-vim.opt.showmode = false
-vim.opt.showtabline = 0
 
-vim.opt.laststatus = 3 -- global
-vim.opt.statusline = " %f %m %= %l:%c ⚡ "
-
-local palette = require("rose-pine.palette")
-
-vim.api.nvim_set_hl(0, "TSRainbowRed", { fg = palette.love, ctermbg = 0 })
-vim.api.nvim_set_hl(0, "TSRainbowYellow", { fg = palette.gold, ctermbg = 0 })
-vim.api.nvim_set_hl(0, "TSRainbowBlue", { fg = palette.foam, ctermbg = 0 })
-vim.api.nvim_set_hl(0, "TSRainbowOrange", { fg = palette.rose, ctermbg = 0 })
-vim.api.nvim_set_hl(0, "TSRainbowGreen", { fg = palette.pine, ctermbg = 0 })
-vim.api.nvim_set_hl(0, "TSRainbowViolet", { fg = palette.iris, ctermbg = 0 })
-
-vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { fg = palette.gold, ctermbg = 0 })
-vim.api.nvim_set_hl(0, "IndentBlanklineContextStart", { sp = palette.gold, underline = true, ctermbg = 0 })
+vim.cmd.syntax("on")
+vim.cmd.colorscheme("rose-pine")

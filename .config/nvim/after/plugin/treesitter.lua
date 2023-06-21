@@ -15,3 +15,5 @@ require("nvim-treesitter.configs").setup({
 		strategy = require("ts-rainbow").strategy.global,
 	},
 })
+
+require("treesitter-context").setup()

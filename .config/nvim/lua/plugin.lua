@@ -14,6 +14,7 @@ end
 vim.opt.runtimepath:prepend(lazypath)
 
 require("lazy").setup({
+	"folke/neodev.nvim",
 	"tpope/vim-fugitive",
 	"lewis6991/gitsigns.nvim",
 	"tpope/vim-commentary",
@@ -58,6 +59,10 @@ require("lazy").setup({
 		end,
 	},
 	{
+		"nvim-treesitter/nvim-treesitter-context",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+	},
+	{
 		"HiPhish/nvim-ts-rainbow2",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 	},
@@ -69,11 +74,15 @@ require("lazy").setup({
 		dependencies = { "nvim-telescope/telescope.nvim" },
 	},
 	{
+		"nvim-telescope/telescope-ui-select.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+	},
+	{
 		"nvim-telescope/telescope-dap.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap", "nvim-treesitter/nvim-treesitter" },
 	},
 	{
-		"nvim-telescope/telescope-ui-select.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim" },
+		"rcarriga/nvim-dap-ui",
+		dependencies = { "mfussenegger/nvim-dap" },
 	},
 })
