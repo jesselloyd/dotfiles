@@ -6,6 +6,7 @@ vim.g.netrw_winsize = 20
 vim.api.nvim_create_autocmd({ "BufReadPost" }, {
 	pattern = { "*" },
 	callback = function()
+		---@diagnostic disable-next-line: undefined-field
 		vim.api.nvim_exec('silent! normal! g`"zv', false)
 	end,
 })

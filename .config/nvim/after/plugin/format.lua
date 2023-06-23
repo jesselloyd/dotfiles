@@ -10,15 +10,8 @@ null_ls.setup({
 		null_ls.builtins.formatting.prettierd,
 		-- diagnostics
 		null_ls.builtins.diagnostics.eslint_d,
-		null_ls.builtins.diagnostics.write_good,
 		-- code actions
 		null_ls.builtins.code_actions.eslint_d,
-		-- completion
-		null_ls.builtins.completion.luasnip,
-		null_ls.builtins.completion.tags,
-		-- hover
-		null_ls.builtins.hover.printenv,
-		null_ls.builtins.hover.dictionary,
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then
