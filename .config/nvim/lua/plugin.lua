@@ -19,13 +19,16 @@ require("lazy").setup({
 	"lewis6991/gitsigns.nvim",
 	"tpope/vim-commentary",
 	"rose-pine/neovim",
+	"sunjon/shade.nvim",
 	"kazhala/close-buffers.nvim",
 	"ray-x/lsp_signature.nvim",
 	"jose-elias-alvarez/null-ls.nvim",
 	"lukas-reineke/indent-blankline.nvim",
 	"mfussenegger/nvim-dap",
 	"David-Kunz/jester",
+	"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
 	"nvim-tree/nvim-tree.lua",
+	"notomo/gesture.nvim",
 	{
 		"VonHeikemen/lsp-zero.nvim",
 		dependencies = {
@@ -57,6 +60,10 @@ require("lazy").setup({
 		init = function()
 			require("nvim-treesitter.install").update({ with_sync = true })()
 		end,
+	},
+	{
+		"folke/twilight.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-context",

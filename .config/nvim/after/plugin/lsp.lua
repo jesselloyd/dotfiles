@@ -52,39 +52,3 @@ lsp.configure("tailwindcss", {
 })
 
 lsp.setup()
-
-local cmp = require("cmp")
-require("luasnip.loaders.from_vscode").lazy_load()
-
-cmp.setup({
-	snippet = {
-		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
-		end,
-	},
-	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-	}, {
-		{ name = "buffer" },
-		{ name = "path" },
-	}),
-})
-
-cmp.setup.filetype("lua", {
-	sources = cmp.config.sources({
-		{ name = "nvim_lua" },
-	}),
-})
-
-vim.diagnostic.config({
-	virtual_text = false,
-	signs = true,
-	severity_sort = true,
-	float = {
-		focusable = true,
-		border = "rounded",
-		source = "always",
-		prefix = "▲ ",
-	},
-})

@@ -49,3 +49,7 @@ vim.opt.termguicolors = true
 
 vim.cmd.syntax("on")
 vim.cmd.colorscheme("rose-pine")
+
+local shade = require("shade")
+
+shade.setup()

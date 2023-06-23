@@ -39,14 +39,14 @@ null_ls.setup({
 			})
 
 			-- show diagnostics window on hovering on a problem
-			vim.api.nvim_create_autocmd("CursorHold", {
-				buffer = bufnr,
-				callback = function()
-					vim.diagnostic.open_float({
-						bufnr = bufnr,
-					})
-				end,
-			})
+			-- vim.api.nvim_create_autocmd("CursorHold", {
+			-- 	buffer = bufnr,
+			-- 	callback = function()
+			-- 		vim.diagnostic.open_float({
+			-- 			bufnr = bufnr,
+			-- 		})
+			-- 	end,
+			-- })
 		end
 	end,
 })
