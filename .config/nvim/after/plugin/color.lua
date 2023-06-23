@@ -12,7 +12,6 @@ require("rose-pine").setup({
 		FloatBorder = { fg = "none", bg = "none" },
 		NormalFloat = { bg = "none" },
 		StatusLine = { fg = palette.text, bg = palette.pine },
-		StatusLineNC = { fg = palette.subtle, bg = palette.surface },
 	},
 })
 
