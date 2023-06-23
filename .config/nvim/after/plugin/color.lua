@@ -11,7 +11,7 @@ require("rose-pine").setup({
 		TelescopeSelectionCaret = { fg = palette.rose, bg = palette.rose },
 		FloatBorder = { fg = "none", bg = "none" },
 		NormalFloat = { bg = "none" },
-		StatusLine = { fg = palette.iris, bg = palette.iris, blend = 10 },
+		StatusLine = { fg = palette.text, bg = palette.pine },
 		StatusLineNC = { fg = palette.subtle, bg = palette.surface },
 	},
 })
