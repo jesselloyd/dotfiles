@@ -30,3 +30,5 @@ vim.opt.showtabline = 0
 
 vim.opt.laststatus = 3
 vim.opt.statusline = " %f %m %= %l:%c ⚡ "
+
+vim.opt.shortmess = "filnxtToOCF"
