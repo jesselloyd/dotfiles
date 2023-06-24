@@ -3,7 +3,7 @@ local signs = require("gitsigns")
 signs.setup({
 	numhl = true,
 	linehl = true,
-	word_diff = true,
+	-- word_diff = true,
 	current_line_blame = true,
 	current_line_blame_opts = {
 		delay = 50,
